@@ -1,0 +1,91 @@
+CREATE TABLE rec_msg (
+	rec_no	number	NOT NULL,
+    send_id	varchar2(50)	NOT NULL,
+	rec_body	varchar2(200)	NULL,
+    rec_date	date	DEFAULT SYSDATE,
+	mem_id	varchar2(50)	NOT NULL,
+    STATUS VARCHAR2(1) DEFAULT 'Y' CHECK(STATUS IN('Y','N'));
+);
+
+
+
+CREATE SEQUENCE SEQ_REC_NO;
+
+ALTER TABLE rec_msg ADD CONSTRAINT PK_REC_MSG PRIMARY KEY (
+	rec_no
+);
+
+ALTER TABLE rec_msg ADD CONSTRAINT FK_member_TO_rec_msg_1 FOREIGN KEY (
+	mem_id
+)
+REFERENCES member (
+	mem_id
+);
+
+
+CREATE TABLE send_msg (
+	send_no	number	NOT NULL,
+	rec_id	 VARCHAR2(50)	NOT NULL,
+	send_body	varchar(200)	NULL,
+	send_date	date DEFAULT SYSDATE,
+	mem_id	varchar2(50)	NOT NULL,
+    STATUS VARCHAR2(1) DEFAULT 'Y' CHECK(STATUS IN('Y','N'))
+);
+
+ALTER TABLE send_msg ADD CONSTRAINT PK_SEND_MSG PRIMARY KEY (
+	send_no
+);
+
+ALTER TABLE send_msg ADD CONSTRAINT FK_member_TO_send_msg FOREIGN KEY (
+	mem_id
+)
+REFERENCES member (
+	mem_id
+);
+
+CREATE SEQUENCE SEQ_SEND_NO;
+
+
+-- 받은 쪽지 이미지
+CREATE TABLE rec_image (
+   REC_IMG_NO   NUMBER   NOT NULL,
+   REC_IMG_PATH   VARCHAR2(100)   NULL,
+   REC_IMG_NAME_ORG   VARCHAR2(50)   NULL,
+   REC_IMG_NAME_SAV   VARCHAR2(50)   NULL,
+    rec_no   number   NOT NULL
+);
+
+--drop table rec_image;
+
+CREATE SEQUENCE SEQ_REC_IMAGE_NO;
+
+ALTER TABLE rec_image ADD CONSTRAINT PK_REC_IMAGE PRIMARY KEY (
+   REC_IMG_NO
+);
+
+COMMENT ON COLUMN rec_image.REC_IMG_NO IS '받은이미지번호';
+COMMENT ON COLUMN rec_image.REC_IMG_PATH IS '저장위치';
+COMMENT ON COLUMN rec_image.REC_IMG_NAME_ORG IS '받은원본파일이름';
+COMMENT ON COLUMN rec_image.REC_IMG_NAME_SAV IS '받은저장파일이름';
+
+-- 보낸 쪽지 이미지
+CREATE TABLE send_image (
+   SEND_IMG_NO   NUMBER   NOT NULL,
+   SEND_IMG_PATH   VARCHAR2(100)   NULL,
+   SEND_IMG_NAME_ORG   VARCHAR2(50)   NULL,
+   SEND_IMG_NAME_SAV   VARCHAR2(50)   NULL,
+   send_no   number   NOT NULL
+);
+
+CREATE SEQUENCE SEQ_SEND_IMAGE_NO;
+
+--drop table send_image;
+
+ALTER TABLE send_image ADD CONSTRAINT PK_SEND_IMAGE PRIMARY KEY (
+   SEND_IMG_NO
+);
+
+COMMENT ON COLUMN send_image.SEND_IMG_NO IS '보낸이미지번호';
+COMMENT ON COLUMN send_image.SEND_IMG_PATH IS '저장위치';
+COMMENT ON COLUMN send_image.SEND_IMG_NAME_ORG IS '보낸원본파일이름';
+COMMENT ON COLUMN send_image.SEND_IMG_NAME_SAV IS '보낸저장파일이름';
